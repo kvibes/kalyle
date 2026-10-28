@@ -1,0 +1,50 @@
+{
+ "footprints": {
+  "house": 9,
+  "wallpost": 94,
+  "other": 32
+ },
+ "traveled_way_overlap_px": 0,
+ "traveled_way_overlap_by_class": {
+  "house": 0,
+  "wallpost": 0,
+  "other": 0
+ },
+ "water_area_m2": 30.38,
+ "water_outside_road_m2": 0.0,
+ "height_range_m": [
+  -0.123,
+  0.121
+ ],
+ "objects_floating_over_5mm_before_fix": [
+  [
+   "st.128",
+   0.042
+  ]
+ ],
+ "objects_floating_over_5mm_after_fix": [],
+ "log": {
+  "removed": [
+   "puddle",
+   "puddle.001",
+   "puddle.002",
+   "puddle.003",
+   "puddle.004",
+   "puddle.005",
+   "road"
+  ],
+  "added": [
+   "image terrain_height_2048.png (16-bit)",
+   "image terrain_masks_1024.png (RGBA 8-bit)",
+   "image mud_detail_tile_1024.png (16-bit)",
+   "GroundAssets collection (excluded from view layer): 6 leaf, 5 pebble, 3 twig, 3 near + 1 far grass tuft meshes",
+   "terrain_gn object with GN_TerrainGround modifier (camera-wedge terrain + instanced litter/grass)",
+   "puddle_water: one flat water surface at z=-0.050 over the road band"
+  ],
+  "changed": [
+   "st.128 lowered 0.052 m to sit on the new terrain",
+   "16 foreground rocks: smooth shading, subdivision + lumpy displacement (global-coordinate clouds, so no two match), fieldstone material with soil grime at the base, sunk 15% of their height deeper; positions kept",
+   "ground plane -> ground_backdrop: subdivision+displace removed, lowered to z=-0.3 under the GN terrain"
+  ]
+ }
+}
