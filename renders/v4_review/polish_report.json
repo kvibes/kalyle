@@ -1,0 +1,120 @@
+{
+ "windows": [
+  {
+   "x": -3.3999993801116943,
+   "z": 1.600000023841858,
+   "w": 0.800000011920929,
+   "h": 1.5,
+   "lit": false
+  },
+  {
+   "x": -2.1999990940093994,
+   "z": 1.600000023841858,
+   "w": 0.800000011920929,
+   "h": 1.5,
+   "lit": false
+  },
+  {
+   "x": 1.8000006675720215,
+   "z": 1.7000000476837158,
+   "w": 2.5999999046325684,
+   "h": 1.5,
+   "lit": false
+  },
+  {
+   "x": -3.1999995708465576,
+   "z": 4.199999809265137,
+   "w": 0.800000011920929,
+   "h": 1.5,
+   "lit": false
+  },
+  {
+   "x": -1.499999761581421,
+   "z": 4.199999809265137,
+   "w": 0.800000011920929,
+   "h": 1.5,
+   "lit": false
+  },
+  {
+   "x": -0.09999918937683105,
+   "z": 4.199999809265137,
+   "w": 0.800000011920929,
+   "h": 1.5,
+   "lit": false
+  },
+  {
+   "x": 1.6000003814697266,
+   "z": 4.199999809265137,
+   "w": 0.8999999761581421,
+   "h": 1.600000023841858,
+   "lit": true
+  },
+  {
+   "x": 3.40000057220459,
+   "z": 4.199999809265137,
+   "w": 0.800000011920929,
+   "h": 1.5,
+   "lit": false
+  }
+ ],
+ "log": {
+  "removed": [
+   "cb",
+   "cb.001",
+   "cb.002",
+   "cb.003",
+   "cb.004",
+   "cb.005",
+   "cb.006",
+   "cb.007",
+   "cb.008",
+   "cb.009",
+   "cb.010",
+   "cb.011",
+   "cb.012",
+   "cb.013",
+   "cb.014",
+   "cb.015",
+   "cb.016",
+   "cb.017",
+   "cb.018",
+   "cb.019",
+   "cb.020",
+   "cb.021",
+   "cb.022",
+   "cb.023",
+   "cb.024",
+   "w",
+   "w.001",
+   "w.002",
+   "w.003",
+   "w.004",
+   "w.005",
+   "w.006",
+   "w.007"
+  ],
+  "added": [
+   "lapped siding: 29 front + 29 right-side boards (21 cm, 18 cm exposure, kicked out 5.5 deg), 3 corner boards, stone plinth",
+   "window openings cut through the wall and siding (Boolean, exact); 2 room cavities 3 m deep behind them",
+   "8 windows: thin glass (IOR 1.52, edge grime, smudged roughness), sash frames, sills; glazing bars moved onto the glass, casings onto the siding",
+   "interiors: plaster rooms, floors, ceiling beams, partitions, curtains (warm in the lit room, pale elsewhere), picture and wardrobe silhouettes in the lit room",
+   "room_lamp: 5000 W warm point light inside the upstairs room, hidden from the camera; replaces the emissive window panel"
+  ],
+  "changed": [
+   "trim material (casings, sashes, sills, corner boards, portico): darker weathered paint with grime instead of clean pale",
+   "roof material rebuilt in place as weathered shingles (staggered courses, butt-edge relief, moss toward the eaves); used by all 9 roofs",
+   "winlight: 900 W -> 150 W (the room lamp now carries the window glow); hidden from glossy rays",
+   "winlight2: 1500 W -> 1000 W, radius 0.25 -> 1.2 m (softer, no hot spot in the weeds)",
+   "fill: 3500 W -> 2600 W so the facade sits back and the lit window leads",
+   "winlight2 hidden from glossy rays (it made a lamp-like blob in the downstairs glass)",
+   "main roof: gable triangles use boarded siding, underside uses soffit wood",
+   "fieldstone material: grey-brown stone with fine grain, sparse lichen, soil grime at ground level",
+   "16 foreground rocks: subdivision/displacement removed, now share the faceted fieldstone meshes; positions kept",
+   "stone wall: 140 box stones replaced in place by irregular fieldstones (10 shared meshes, same positions, yaw and size)",
+   "4 bottom-course wall stones lowered onto the terrain (they floated up to a few cm)",
+   "58 fence posts and rails: 12 mm bevels, weathered wood with grain along each piece",
+   "moon: emission 7 -> 3.6 with broad darker maria and limb darkening, so the disc shows surface detail",
+   "view exposure: 0.60 -> 0.85"
+  ]
+ }
+}
