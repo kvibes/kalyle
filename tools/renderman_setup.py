@@ -46,7 +46,9 @@ def find_rfb_package():
 PKG = find_rfb_package()
 texture_utils = importlib.import_module(PKG + ".rfb_utils.texture_utils")
 BLEND_DIR = bpy.path.abspath("//")
-manifest_path = os.path.join(BLEND_DIR, "textures_rman", "manifest.json")
+# a manifest named after the open .blend (e.g. manifest_haunted_village_v6.json) wins over the shared one
+_specific = os.path.join(BLEND_DIR, "textures_rman", "manifest_%s.json" % os.path.splitext(os.path.basename(bpy.data.filepath))[0])
+manifest_path = _specific if os.path.exists(_specific) else os.path.join(BLEND_DIR, "textures_rman", "manifest.json")
 with open(manifest_path) as fh:
     MANIFEST = json.load(fh)
 

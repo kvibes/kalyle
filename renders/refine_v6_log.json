@@ -1,0 +1,14 @@
+{
+ "added": [
+  "foreground brush: 5 twiggy shrub meshes (tapered twigs, dry leaves reusing the 6 baked leaf materials), 35 placements along the wall, fence, barrel, foreground and verges, seated on the terrain, none within 2.10 m of the road centreline",
+  "yard_spill: 450 W warm 2 m disc light just outside the frame on the right, raking across the barrel, wall and brush",
+  "frames and sills on 39 village and right-hand-house windows"
+ ],
+ "changed": [
+  "moon: radius 9 -> 6.5 m, generated lunar albedo (7 maria, 320 craters, a rayed crater) replaces the blotchy noise; emission 3.6 -> 1.9 so the maria and craters read",
+  "moon halo card: glow 1.6 -> 2.3 (Cycles only)",
+  "sky: clouds within ~30 deg of the moon lit from behind (silver edges, soft glow), far sky up to 20% darker; new map sky_emission_v6.png",
+  "fog: mist and world volume colours cooler; vlight (warm village lamp) 500 -> 1200 W, radius 1 m, no longer scatters in the fog",
+  "road: pebble density x3 (more gravel on the road and shoulders; wheel tracks still kept mostly clear)"
+ ]
+}

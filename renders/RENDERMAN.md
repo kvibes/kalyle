@@ -8,12 +8,14 @@ So the textures were baked to image maps (`textures_rman/`), and a script builds
 
 ## What you need
 - Blender 5.x with RenderMan for Blender 27.x enabled (RenderMan 27 installed and licensed).
-- `haunted_village_v5.blend` with the `textures_rman/` folder next to it, as in this repo.
+- `haunted_village_v6.blend` (latest) or `haunted_village_v5.blend`, with the `textures_rman/` folder next to it, as in this repo.
+  - The script reads `textures_rman/manifest_<file name>.json` when it exists, so v6 uses `manifest_haunted_village_v6.json`.
+  - Otherwise it falls back to the shared `manifest.json`, which is v5's.
 
 ## Steps
-1. **Open the scene:** open `renders/haunted_village_v5.blend` in Blender.
+1. **Open the scene:** open `renders/haunted_village_v6.blend` (or v5) in Blender.
 2. **Run the setup script:** in the Scripting workspace, Open `tools/renderman_setup.py` and Run Script. From a terminal, the equivalent is:
-   `blender -b renders/haunted_village_v5.blend --python tools/renderman_setup.py`
+   `blender -b renders/haunted_village_v6.blend --python tools/renderman_setup.py`
 3. **Read the summary:** the script prints a summary and writes `renders/renderman_setup_log.txt`. A clean run reports 0 warnings. Any warning names the node or parameter your RenderMan version didn't accept.
 4. **Save the file** (it now has both Cycles and RenderMan materials) and render with RenderMan.
    - The first render can wait while RenderMan's texture manager converts the PNGs to `.tex`. The Texture Manager window shows progress.
