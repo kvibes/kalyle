@@ -1,2 +1,3 @@
 textures/_*.npy
 __pycache__/
+*.blend1
