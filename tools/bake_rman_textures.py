@@ -8,7 +8,10 @@ colours where needed), each material is rebuilt as an image-driven Principled BS
 be checked in Cycles against v4), and a manifest records how each material maps onto RenderMan nodes.
 `renderman_setup.py` reads that manifest inside Blender with RenderMan for Blender installed.
 
-Usage: python3 bake_rman_textures.py <v4.blend> <v5.blend> <texture_dir> <manifest.json>
+Usage: python3 bake_rman_textures.py <in.blend> <out.blend> <texture_dir> <manifest.json> <stage>
+  stage 1: atlas groups (unique meshes, packed UVs), from v4; saves an intermediate .blend
+  stage 2: shared-mesh groups, glass, leaves, vertex colours, emitters, terrain, constants; saves v5
+The final v5 .blend is expected next to <texture_dir> (manifest paths are relative to that folder).
 """
 import bpy, math, os, sys, json, time
 import numpy as np
@@ -17,7 +20,7 @@ from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ground_maps as gm
 
-IN_BLEND, OUT_BLEND, TEX_DIR, MANIFEST = sys.argv[1:5]
+IN_BLEND, OUT_BLEND, TEX_DIR, MANIFEST, STAGE = sys.argv[1:6]
 os.makedirs(TEX_DIR, exist_ok=True)
 bpy.ops.wm.open_mainfile(filepath=IN_BLEND)
 scene = bpy.context.scene
@@ -25,13 +28,13 @@ vl = bpy.context.view_layer
 scene.render.engine = "CYCLES"
 scene.cycles.device = "CPU"
 render_samples = scene.cycles.samples
-scene.cycles.samples = 2
+scene.cycles.samples = 1
 scene.render.bake.margin = 4
 scene.render.bake.margin_type = "EXTEND"
 # Bakes run in a scene that holds only the objects being baked: in the full scene every bake call
 # re-syncs the GN terrain, ~11k instances, weeds and volumes (a 256^2 test took 113 s there vs 0.4 s isolated).
 BAKE_SCENE = bpy.data.scenes.new("rman_bake")
-BAKE_SCENE.render.engine = "CYCLES"; BAKE_SCENE.cycles.device = "CPU"; BAKE_SCENE.cycles.samples = 2
+BAKE_SCENE.render.engine = "CYCLES"; BAKE_SCENE.cycles.device = "CPU"; BAKE_SCENE.cycles.samples = 1
 BAKE_SCENE.render.bake.margin = 4; BAKE_SCENE.render.bake.margin_type = "EXTEND"
 BAKE_VL = BAKE_SCENE.view_layers[0]
 assets_lc = vl.layer_collection.children.get("GroundAssets")
@@ -39,6 +42,9 @@ if assets_lc:
     assets_lc.exclude = False           # assets must be in the view layer to be selected and baked
 
 manifest = {"textures_dir": os.path.basename(TEX_DIR.rstrip("/")), "materials": {}, "volumes": {}, "lights": [], "notes": []}
+if STAGE == "2" and os.path.exists(MANIFEST):
+    with open(MANIFEST) as fh:
+        manifest = json.load(fh)
 t_start = time.time()
 
 
@@ -189,7 +195,8 @@ def save(img, name, mode):
 
 
 def rel(path):
-    return os.path.relpath(path, os.path.dirname(os.path.abspath(OUT_BLEND))).replace(os.sep, "/")
+    # relative to the folder that holds the final v5 .blend (the parent of the texture folder)
+    return os.path.relpath(path, os.path.dirname(os.path.abspath(TEX_DIR.rstrip("/")))).replace(os.sep, "/")
 
 
 def load(path, colorspace):
@@ -217,7 +224,7 @@ def bake_standard(name, objs, materials, size, translucency=None, extra_maps=Non
         rebuild(m, maps, consts, translucency.get(m.name, 0.0) if translucency else 0.0)
         manifest["materials"][m.name] = {"kind": "surface", "maps": {k: rel(v) for k, v in maps.items()}, "constants": consts,
                                          "translucency": translucency.get(m.name, 0.0) if translucency else 0.0}
-    print("baked %-20s %-5s objs=%-4d %5.1fs" % (name, "%dx%d" % (w, h), len(objs), time.time() - t0))
+    print("baked %-20s %-5s objs=%-4d %5.1fs" % (name, "%dx%d" % (w, h), len(objs), time.time() - t0), flush=True)
     return maps
 
 
@@ -271,22 +278,36 @@ def constant_entry(m, kind="surface"):
         "metallic": c(p.inputs["Metallic"]), "emission": c(p.inputs["Emission Color"]), "emissionStrength": c(p.inputs["Emission Strength"])}}
 
 
+def finish():
+    """Restore the scene's settings, save the .blend and the manifest, and stop."""
+    if assets_lc:
+        assets_lc.exclude = True
+    bpy.data.scenes.remove(BAKE_SCENE)
+    scene.cycles.samples = render_samples
+    bpy.ops.wm.save_as_mainfile(filepath=OUT_BLEND, compress=True, relative_remap=True)
+    manifest.setdefault("bake_seconds", {})["stage_" + STAGE] = round(time.time() - t_start, 1)
+    with open(MANIFEST, "w") as fh:
+        json.dump(manifest, fh, indent=1)
+    print("stage", STAGE, "saved", OUT_BLEND, "in %.0fs" % (time.time() - t_start), flush=True)
+    sys.exit(0)
+
+
 # ------------------------------------------------------------------ 1. atlas groups (unique meshes, packed UVs)
 ATLAS = [  # material(s), object filter, size
-    (["siding_weathered"], None, 4096),
-    (["fieldstone"], None, 4096),
-    (["roof", "gable_boards", "soffit_wood"], None, 4096),
+    (["siding_weathered"], None, 2048),
+    (["fieldstone"], None, 2048),
+    (["roof", "gable_boards", "soffit_wood"], None, 2048),
     (["fence_post_wood", "fence_rail_wood"], None, 2048),
-    (["trim"], None, 2048),
-    (["plinth_stone"], None, 1024),
-    (["stave"], None, 1024),
-    (["shrub"], None, 1024),
+    (["trim"], None, 1024),
+    (["plinth_stone"], None, 512),
+    (["stave"], None, 512),
+    (["shrub"], None, 512),
     (["curtain_warm"], None, 512),
-    (["curtain_pale"], None, 1024),
-    (["pebble"], None, 512),
-    (["twig_bark"], None, 512),
+    (["curtain_pale"], None, 512),
+    (["pebble"], None, 256),
+    (["twig_bark"], None, 256),
 ]
-for names, _, size in ATLAS:
+for names, _, size in (ATLAS if STAGE == "1" else []):
     materials = [mat(n) for n in names]
     objs = sorted({o for m in materials for o in objs_with(m)}, key=lambda o: o.name)
     make_unique(objs)
@@ -301,9 +322,14 @@ for names, _, size in ATLAS:
                     m.node_tree.links.new(oi.outputs["Random"], l.to_socket)
     bake_standard("_".join(names[:1]), objs, materials, size, translucency=trans)
 
+if STAGE == "1":
+    finish()
+
 # ------------------------------------------------------------------ 2. shared-mesh groups: one representative bake
-REP = [("wood", "house2", 1024), ("wood_lit", "lh", 1024), ("brick", "chimney", 1024), ("stone", "chimcap", 512),
-       ("dark_wood", "beam_up", 1024), ("door_wood", "door", 512), ("painting_canvas", "picture", 256)]
+REP = [("wood", "house2", 1024), ("wood_lit", "lh", 512), ("brick", "chimney", 512), ("stone", "chimcap", 256),
+       ("dark_wood", "beam_up", 512), ("door_wood", "door", 512), ("painting_canvas", "picture", 256)]
+if STAGE == "1":
+    REP = []
 cube_mesh = bpy.data.meshes.get("unit_cube")
 for name, rep, size in REP:
     m = mat(name)
@@ -378,7 +404,7 @@ for name in ("dry_grass", "weed"):
     print("baked %s to vertex colours on %d meshes" % (name, len(objs)))
 
 # ------------------------------------------------------------------ 5. emitters: sky dome and moon
-for name, size in (("sky", (4096, 2048)), ("moon", (1024, 512))):
+for name, size in (("sky", (6144, 3072)), ("moon", (1024, 512))):
     m = mat(name)
     o = objs_with(m)[0]
     em = output_node(m).inputs["Surface"].links[0].from_node
@@ -451,13 +477,4 @@ for o in scene.objects:
         manifest["lights"].append({"name": o.name, "type": o.data.type, "energy": o.data.energy, "color": list(o.data.color),
                                    "radius": getattr(o.data, "shadow_soft_size", 0.0), "size": getattr(o.data, "size", 0.0)})
 
-# remove orphaned procedural nodes' images? keep the v3 maps (terrain height/masks still drive the GN modifier)
-if assets_lc:
-    assets_lc.exclude = True
-bpy.data.scenes.remove(BAKE_SCENE)
-scene.cycles.samples = render_samples
-bpy.ops.wm.save_as_mainfile(filepath=OUT_BLEND, compress=True, relative_remap=True)
-manifest["bake_seconds"] = round(time.time() - t_start, 1)
-with open(MANIFEST, "w") as fh:
-    json.dump(manifest, fh, indent=1)
-print("saved", OUT_BLEND, "in %.0fs" % (time.time() - t_start))
+finish()
