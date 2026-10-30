@@ -1,0 +1,746 @@
+{
+ "textures_dir": "textures_rman",
+ "materials": {
+  "siding_weathered": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/siding_weathered_basecolor.png",
+    "roughness": "textures_rman/siding_weathered_roughness.png",
+    "normal": "textures_rman/siding_weathered_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "fieldstone": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/fieldstone_basecolor.png",
+    "roughness": "textures_rman/fieldstone_roughness.png",
+    "normal": "textures_rman/fieldstone_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "roof": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/roof_basecolor.png",
+    "roughness": "textures_rman/roof_roughness.png",
+    "normal": "textures_rman/roof_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "gable_boards": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/roof_basecolor.png",
+    "roughness": "textures_rman/roof_roughness.png",
+    "normal": "textures_rman/roof_normal.png"
+   },
+   "constants": {
+    "roughness": 0.800000011920929,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "soffit_wood": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/roof_basecolor.png",
+    "roughness": "textures_rman/roof_roughness.png",
+    "normal": "textures_rman/roof_normal.png"
+   },
+   "constants": {
+    "roughness": 0.800000011920929,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "fence_post_wood": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/fence_post_wood_basecolor.png",
+    "roughness": "textures_rman/fence_post_wood_roughness.png",
+    "normal": "textures_rman/fence_post_wood_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "fence_rail_wood": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/fence_post_wood_basecolor.png",
+    "roughness": "textures_rman/fence_post_wood_roughness.png",
+    "normal": "textures_rman/fence_post_wood_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "trim": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/trim_basecolor.png",
+    "roughness": "textures_rman/trim_roughness.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "plinth_stone": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/plinth_stone_basecolor.png",
+    "normal": "textures_rman/plinth_stone_normal.png"
+   },
+   "constants": {
+    "roughness": 0.8500000238418579,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "stave": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/stave_basecolor.png",
+    "normal": "textures_rman/stave_normal.png"
+   },
+   "constants": {
+    "roughness": 0.75,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "shrub": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/shrub_basecolor.png",
+    "normal": "textures_rman/shrub_normal.png"
+   },
+   "constants": {
+    "roughness": 0.949999988079071,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "curtain_warm": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/curtain_warm_basecolor.png"
+   },
+   "constants": {
+    "roughness": 0.8500000238418579,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.44999998807907104
+  },
+  "curtain_pale": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/curtain_pale_basecolor.png"
+   },
+   "constants": {
+    "roughness": 0.8500000238418579,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.25
+  },
+  "pebble": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/pebble_basecolor.png",
+    "roughness": "textures_rman/pebble_roughness.png",
+    "normal": "textures_rman/pebble_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "twig_bark": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/twig_bark_basecolor.png"
+   },
+   "constants": {
+    "roughness": 0.8500000238418579,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "wood": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/wood_basecolor.png",
+    "normal": "textures_rman/wood_normal.png"
+   },
+   "constants": {
+    "roughness": 0.8500000238418579,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "wood_lit": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/wood_lit_basecolor.png",
+    "normal": "textures_rman/wood_lit_normal.png"
+   },
+   "constants": {
+    "roughness": 0.8500000238418579,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "brick": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/brick_basecolor.png",
+    "normal": "textures_rman/brick_normal.png"
+   },
+   "constants": {
+    "roughness": 0.8999999761581421,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "stone": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/stone_basecolor.png",
+    "normal": "textures_rman/stone_normal.png"
+   },
+   "constants": {
+    "roughness": 0.949999988079071,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "dark_wood": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/dark_wood_basecolor.png"
+   },
+   "constants": {
+    "roughness": 0.699999988079071,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "door_wood": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/door_wood_basecolor.png"
+   },
+   "constants": {
+    "roughness": 0.699999988079071,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "painting_canvas": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/painting_canvas_basecolor.png"
+   },
+   "constants": {
+    "roughness": 0.800000011920929,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "window_glass": {
+   "kind": "glass",
+   "maps": {
+    "roughness": "textures_rman/window_glass_roughness.png",
+    "grime": "textures_rman/window_glass_grime.png"
+   },
+   "constants": {
+    "ior": 1.52,
+    "thin": true,
+    "transmitColor": [
+     0.9,
+     0.95,
+     0.92
+    ],
+    "dirtColor": [
+     0.11,
+     0.1,
+     0.085
+    ],
+    "grimeScale": 1.0
+   }
+  },
+  "leaf_litter_0": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/leaf_0_basecolor.png",
+    "roughness": "textures_rman/leaf_0_roughness.png",
+    "normal": "textures_rman/leaf_0_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.11999999731779099
+  },
+  "leaf_litter_1": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/leaf_1_basecolor.png",
+    "roughness": "textures_rman/leaf_1_roughness.png",
+    "normal": "textures_rman/leaf_1_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.11999999731779099
+  },
+  "leaf_litter_2": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/leaf_2_basecolor.png",
+    "roughness": "textures_rman/leaf_2_roughness.png",
+    "normal": "textures_rman/leaf_2_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.11999999731779099
+  },
+  "leaf_litter_3": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/leaf_3_basecolor.png",
+    "roughness": "textures_rman/leaf_3_roughness.png",
+    "normal": "textures_rman/leaf_3_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.11999999731779099
+  },
+  "leaf_litter_4": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/leaf_4_basecolor.png",
+    "roughness": "textures_rman/leaf_4_roughness.png",
+    "normal": "textures_rman/leaf_4_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.11999999731779099
+  },
+  "leaf_litter_5": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/leaf_5_basecolor.png",
+    "roughness": "textures_rman/leaf_5_roughness.png",
+    "normal": "textures_rman/leaf_5_normal.png"
+   },
+   "constants": {
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.0
+   },
+   "translucency": 0.11999999731779099
+  },
+  "dry_grass": {
+   "kind": "vertex_color",
+   "primvar": "Cs",
+   "constants": {
+    "roughness": 0.699999988079071
+   },
+   "translucency": 0.20000000298023224
+  },
+  "weed": {
+   "kind": "vertex_color",
+   "primvar": "Cs",
+   "constants": {
+    "roughness": 0.699999988079071
+   },
+   "translucency": 0.0
+  },
+  "sky": {
+   "kind": "emissive",
+   "maps": {
+    "emission": "textures_rman/sky_emission.png"
+   },
+   "constants": {
+    "intensity": 0.44999998807907104
+   }
+  },
+  "moon": {
+   "kind": "emissive",
+   "maps": {
+    "emission": "textures_rman/moon_emission.png"
+   },
+   "constants": {
+    "intensity": 3.5999999046325684
+   }
+  },
+  "terrain_mud": {
+   "kind": "surface",
+   "maps": {
+    "baseColor": "textures_rman/terrain_basecolor.png",
+    "roughness": "textures_rman/terrain_roughness.png",
+    "normal": "textures_rman/terrain_normal.png"
+   },
+   "detail": {
+    "height": "textures_rman/terrain_detail_height.png",
+    "repeat": 40.0,
+    "bumpScale": 0.8,
+    "distance": 0.012
+   },
+   "constants": {
+    "roughness": 0.8,
+    "ior": 1.4,
+    "metallic": 0.0
+   },
+   "translucency": 0.0
+  },
+  "bark": {
+   "kind": "surface",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     0.012000000104308128,
+     0.009999999776482582,
+     0.009999999776482582
+    ],
+    "roughness": 0.8999999761581421,
+    "ior": 1.5,
+    "metallic": 0.0,
+    "emission": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "emissionStrength": 0.0
+   }
+  },
+  "darkwin": {
+   "kind": "surface",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     0.004999999888241291,
+     0.007000000216066837,
+     0.012000000104308128
+    ],
+    "roughness": 0.10000000149011612,
+    "ior": 1.5,
+    "metallic": 0.0,
+    "emission": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "emissionStrength": 0.0
+   }
+  },
+  "iron": {
+   "kind": "surface",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     0.019999999552965164,
+     0.019999999552965164,
+     0.019999999552965164
+    ],
+    "roughness": 0.5,
+    "ior": 1.5,
+    "metallic": 0.800000011920929,
+    "emission": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "emissionStrength": 0.0
+   }
+  },
+  "interior_plaster": {
+   "kind": "surface",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     0.800000011920929,
+     0.800000011920929,
+     0.800000011920929
+    ],
+    "roughness": 0.9200000166893005,
+    "ior": 1.5,
+    "metallic": 0.0,
+    "emission": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "emissionStrength": 0.0
+   }
+  },
+  "interior_plaster_dim": {
+   "kind": "surface",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     0.800000011920929,
+     0.800000011920929,
+     0.800000011920929
+    ],
+    "roughness": 0.9200000166893005,
+    "ior": 1.5,
+    "metallic": 0.0,
+    "emission": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "emissionStrength": 0.0
+   }
+  },
+  "floor_boards": {
+   "kind": "surface",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     0.800000011920929,
+     0.800000011920929,
+     0.800000011920929
+    ],
+    "roughness": 0.6000000238418579,
+    "ior": 1.5,
+    "metallic": 0.0,
+    "emission": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "emissionStrength": 0.0
+   }
+  },
+  "ground": {
+   "kind": "surface",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     0.800000011920929,
+     0.800000011920929,
+     0.800000011920929
+    ],
+    "roughness": 0.550000011920929,
+    "ior": 1.5,
+    "metallic": 0.0,
+    "emission": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "emissionStrength": 0.0
+   }
+  },
+  "window2": {
+   "kind": "emissive_constant",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     1.0,
+     0.550000011920929,
+     0.20000000298023224
+    ],
+    "roughness": 0.30000001192092896,
+    "ior": 1.5,
+    "metallic": 0.0,
+    "emission": [
+     1.0,
+     0.44999998807907104,
+     0.11999999731779099
+    ],
+    "emissionStrength": 7.0,
+    "intensity": 7.0
+   }
+  },
+  "puddle_water": {
+   "kind": "surface",
+   "maps": {},
+   "constants": {
+    "baseColor": [
+     0.016,
+     0.013,
+     0.01
+    ],
+    "roughness": 0.035,
+    "ior": 1.333,
+    "metallic": 0.0
+   }
+  },
+  "halo": {
+   "kind": "skip",
+   "reason": "camera-facing glow card; in RenderMan the moon light scattering in the volumes gives the glow"
+  }
+ },
+ "volumes": {
+  "mist": {
+   "object": "Cube",
+   "density": 0.045,
+   "color": [
+    0.6,
+    0.7,
+    0.9
+   ],
+   "note": "noise-modulated in Cycles (0-0.09); constant mean density here"
+  },
+  "smoke": {
+   "object": "Cone",
+   "density": 1.5,
+   "color": [
+    0.75,
+    0.8,
+    0.9
+   ],
+   "note": "noise and height falloff in Cycles; constant density here"
+  },
+  "world": {
+   "density": 0.0008,
+   "color": [
+    0.55,
+    0.65,
+    0.85
+   ],
+   "note": "Cycles world volume; add a large PxrVolume box in RenderMan"
+  }
+ },
+ "lights": [
+  {
+   "name": "winlight",
+   "type": "POINT",
+   "energy": 150.0,
+   "color": [
+    1.0,
+    0.550000011920929,
+    0.20000000298023224
+   ],
+   "radius": 0.4000000059604645,
+   "size": 0.0
+  },
+  {
+   "name": "winlight2",
+   "type": "POINT",
+   "energy": 1000.0,
+   "color": [
+    1.0,
+    0.550000011920929,
+    0.25
+   ],
+   "radius": 1.2000000476837158,
+   "size": 0.0
+  },
+  {
+   "name": "vlight",
+   "type": "POINT",
+   "energy": 500.0,
+   "color": [
+    1.0,
+    0.5,
+    0.20000000298023224
+   ],
+   "radius": 0.0,
+   "size": 0.0
+  },
+  {
+   "name": "moonlight",
+   "type": "SUN",
+   "energy": 2.200000047683716,
+   "color": [
+    0.550000011920929,
+    0.6800000071525574,
+    1.0
+   ],
+   "radius": 0.0,
+   "size": 0.0
+  },
+  {
+   "name": "fill",
+   "type": "AREA",
+   "energy": 2600.0,
+   "color": [
+    0.30000001192092896,
+    0.4000000059604645,
+    0.800000011920929
+   ],
+   "radius": 0.0,
+   "size": 30.0
+  },
+  {
+   "name": "room_lamp",
+   "type": "POINT",
+   "energy": 5000.0,
+   "color": [
+    1.0,
+    0.6000000238418579,
+    0.27000001072883606
+   ],
+   "radius": 0.11999999731779099,
+   "size": 0.0
+  }
+ ],
+ "notes": [
+  "Leaves: one colour variant per leaf shape (6); the per-instance damp darkening near water is not carried over.",
+  "Moon limb darkening (view-dependent) is not in the baked map.",
+  "Terrain: baked at 4096^2 over the 64 m map (1.6 cm per texel) with the mud micro-height tile repeated 40x on top as bump."
+ ],
+ "bake_seconds": {
+  "stage_1": 792.5,
+  "stage_2": 250.2
+ }
+}

@@ -112,14 +112,84 @@ def make_unique(objs):
             o.data = o.data.copy()
 
 
-def unwrap(objs, margin=0.003, smart=True):
+def unwrap(objs, margin=0.003, smart=True, shape="AABB"):
     select_only(objs)
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.mesh.select_all(action="SELECT")
     if smart:
         bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=margin)
-    bpy.ops.uv.pack_islands(margin=margin, rotate=True, shape_method="AABB")
+    bpy.ops.uv.pack_islands(margin=margin, rotate=True, shape_method=shape)
     bpy.ops.object.mode_set(mode="OBJECT")
+
+
+def box_uv_world(objs, atlas, gap=4, minor=None):
+    """UVs for box meshes stretched by object scale: every face becomes an island sized by its real
+    dimensions, shelf-packed at one texel density (the finest that fits). Smart project works in unscaled
+    mesh space, where every face of a unit cube is the same square, whatever the object's scale.
+    minor(normal) -> True marks faces that are hidden in the shot; they get 1/8 of the texel density."""
+    faces = []
+    for o in objs:
+        me = o.data
+        S = o.matrix_world.to_scale()
+        uvl = me.uv_layers.get("UVMap") or me.uv_layers.new(name="UVMap")
+        me.uv_layers.active = uvl
+        uvl.active_render = True
+        for p in me.polygons:
+            ax = max(range(3), key=lambda i: abs(p.normal[i]))
+            a, b = [i for i in range(3) if i != ax]
+            co = [me.vertices[v].co for v in p.vertices]
+            ua = [c[a] * S[a] for c in co]; ub = [c[b] * S[b] for c in co]
+            k = 8.0 if minor is not None and minor(p.normal) else 1.0
+            faces.append((o, p.index, a, b, S, min(ua), min(ub), max(ua) - min(ua), max(ub) - min(ub), k))
+
+    def pack(texel):
+        items = []
+        for f in faces:
+            wp, hp = max(1, math.ceil(f[7] / (texel * f[9]))), max(1, math.ceil(f[8] / (texel * f[9])))
+            rot = wp > atlas - 2 * gap
+            if rot:
+                wp, hp = hp, wp
+            if wp > atlas - 2 * gap:
+                return None
+            items.append([f, wp, hp, rot])
+        items.sort(key=lambda it: -it[2])
+        x = y = gap; row = 0
+        for it in items:
+            if x + it[1] + gap > atlas:
+                x = gap; y += row + gap; row = 0
+            it += [x, y]
+            x += it[1] + gap; row = max(row, it[2])
+        return items if y + row + gap <= atlas else None
+
+    lo, hi, best = 1e-4, 2.0, None
+    for _ in range(40):
+        mid = 0.5 * (lo + hi)
+        res = pack(mid)
+        if res is None:
+            lo = mid
+        else:
+            hi, best = mid, res
+    texel = hi
+    for (o, pi, a, b, S, u0, v0, w, h, k), wp, hp, rot, x, y in best:
+        me = o.data
+        uvl = me.uv_layers.active
+        for li in me.polygons[pi].loop_indices:
+            c = me.vertices[me.loops[li].vertex_index].co
+            du, dv = (c[a] * S[a] - u0) / (texel * k), (c[b] * S[b] - v0) / (texel * k)
+            if rot:
+                du, dv = dv, du
+            uvl.data[li].uv = ((x + du) / atlas, (y + dv) / atlas)
+    return texel
+
+
+def shared_reps(m):
+    """One representative per shared mesh (the lowest instance, so ground grime is captured)."""
+    by_mesh = {}
+    for o in objs_with(m):
+        by_mesh.setdefault(o.data.name, []).append(o)
+    reps = [min(v, key=lambda o: o.matrix_world.translation.z) for v in by_mesh.values()]
+    unwrap(reps, margin=0.004, shape="CONCAVE")
+    return reps
 
 
 BAKE_NODE, EMIT_NODE = "__rman_bake__", "__rman_emit__"
@@ -293,25 +363,33 @@ def finish():
 
 
 # ------------------------------------------------------------------ 1. atlas groups (unique meshes, packed UVs)
-ATLAS = [  # material(s), object filter, size
-    (["siding_weathered"], None, 2048),
-    (["fieldstone"], None, 2048),
-    (["roof", "gable_boards", "soffit_wood"], None, 2048),
-    (["fence_post_wood", "fence_rail_wood"], None, 2048),
-    (["trim"], None, 1024),
-    (["plinth_stone"], None, 512),
-    (["stave"], None, 512),
-    (["shrub"], None, 512),
-    (["curtain_warm"], None, 512),
-    (["curtain_pale"], None, 512),
-    (["pebble"], None, 256),
-    (["twig_bark"], None, 256),
+ATLAS = [  # material(s), UV method, atlas size
+    (["siding_weathered"], "box", 2048),
+    (["fieldstone"], "shared", 2048),
+    (["roof", "gable_boards", "soffit_wood"], "smart", 2048),
+    (["fence_post_wood", "fence_rail_wood"], "box", 2048),
+    (["trim"], "box", 1024),
+    (["plinth_stone"], "box", 1024),
+    (["stave"], "smart", 512),
+    (["shrub"], "smart", 512),
+    (["curtain_warm"], "smart", 512),
+    (["curtain_pale"], "smart", 512),
+    (["pebble"], "smart", 256),
+    (["twig_bark"], "smart", 256),
 ]
-for names, _, size in (ATLAS if STAGE == "1" else []):
+for names, method, size in (ATLAS if STAGE == "1" else []):
     materials = [mat(n) for n in names]
     objs = sorted({o for m in materials for o in objs_with(m)}, key=lambda o: o.name)
-    make_unique(objs)
-    unwrap(objs)
+    if method == "box":
+        make_unique(objs)
+        # siding boards: the back (mesh +Y, against the wall) and top (+Z, under the next board) are hidden
+        minor = (lambda n: n.y > 0.5 or n.z > 0.5) if names == ["siding_weathered"] else None
+        print("  %s: %.1f mm per texel" % (names[0], box_uv_world(objs, size, minor=minor) * 1000), flush=True)
+    elif method == "shared":
+        objs = shared_reps(materials[0])
+    else:
+        make_unique(objs)
+        unwrap(objs)
     trans = {m.name: translucency_of(m) for m in materials}
     if names == ["pebble"]:           # instance colour comes from the instancer; vary it per pebble mesh instead
         m = materials[0]
@@ -437,9 +515,19 @@ if not terr.data.uv_layers:
 tm = mat("terrain_mud")
 p = surface_principled(tm)
 detail_img = next(n.image for n in tm.node_tree.nodes if n.bl_idname == "ShaderNodeTexImage" and n.image and n.image.name.startswith("mud_detail"))
-tmaps = {"baseColor": save(bake([terr], [tm], 4096, 4096, "EMIT", lambda m: value_of(p.inputs["Base Color"])), "terrain_basecolor", "srgb"),
-         "roughness": save(bake([terr], [tm], 4096, 4096, "EMIT", lambda m: value_of(p.inputs["Roughness"])), "terrain_roughness", "gray"),
-         "normal": save(bake([terr], [tm], 4096, 4096, "NORMAL"), "terrain_normal", "normal")}
+# the bake scene only sees the modifier object's empty base mesh, so bake a static copy of the evaluated terrain
+dg = bpy.context.evaluated_depsgraph_get()
+tmesh = bpy.data.meshes.new_from_object(terr.evaluated_get(dg), preserve_all_data_layers=True, depsgraph=dg)
+tuv = tmesh.uv_layers.get("UVMap")
+tmesh.uv_layers.active = tuv
+tuv.active_render = True
+tobj = bpy.data.objects.new("terrain_bake_tmp", tmesh)
+print("terrain bake copy: %d faces, materials %s" % (len(tmesh.polygons), [m_.name for m_ in tmesh.materials if m_]), flush=True)
+tmaps = {"baseColor": save(bake([tobj], [tm], 4096, 4096, "EMIT", lambda m: value_of(p.inputs["Base Color"])), "terrain_basecolor", "srgb"),
+         "roughness": save(bake([tobj], [tm], 4096, 4096, "EMIT", lambda m: value_of(p.inputs["Roughness"])), "terrain_roughness", "gray"),
+         "normal": save(bake([tobj], [tm], 4096, 4096, "NORMAL"), "terrain_normal", "normal")}
+bpy.data.objects.remove(tobj)
+bpy.data.meshes.remove(tmesh)
 detail_path = os.path.join(TEX_DIR, "terrain_detail_height.png")
 dw, dh = detail_img.size
 dbuf = np.empty(dw * dh * 4, np.float32); detail_img.pixels.foreach_get(dbuf)
