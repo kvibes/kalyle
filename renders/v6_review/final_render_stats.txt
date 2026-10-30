@@ -1,0 +1,6 @@
+v6 final render
+engine=CYCLES device=CPU res=1920x1080 samples=64 denoise=on
+render_seconds=772.8
+cycles_mem_max_MB=776 (largest "Mem" in Cycles render stats; image textures included)
+process_peak_rss_MB=3069
+VRAM: not applicable (CPU render)
