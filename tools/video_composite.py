@@ -130,8 +130,11 @@ N2 = gm.spectral_noise(512, 2.3, 32); N2 = (N2 - N2.min()) / (N2.max() - N2.min(
 
 
 def noise(Nf, ox, oy, scale):
-    fx = (xx / scale + ox) % 512; fy = (yy / scale + oy) % 512
-    x0 = fx.astype(np.int64); y0 = fy.astype(np.int64); tx = fx - x0; ty = fy - y0
+    fx = xx / scale + ox; fy = yy / scale + oy
+    fx0 = np.floor(fx); fy0 = np.floor(fy)
+    tx = fx - fx0; ty = fy - fy0
+    # wrap after flooring: a float modulo can round up to exactly 512 and index past the end
+    x0 = fx0.astype(np.int64) % 512; y0 = fy0.astype(np.int64) % 512
     x1 = (x0 + 1) % 512; y1 = (y0 + 1) % 512
     return (Nf[y0, x0] * (1 - tx) + Nf[y0, x1] * tx) * (1 - ty) + (Nf[y1, x0] * (1 - tx) + Nf[y1, x1] * tx) * ty
 
